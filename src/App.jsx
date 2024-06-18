@@ -1,13 +1,55 @@
-import React, { Component } from 'react'; // Cambia "React" a "react"
+import React, { Component } from 'react';
+import faker from 'faker'; // Asegúrate de importar faker correctamente
+
+
+//creamos un nuevo componente para renderizar los mensajes
+class Chat extends Component {
+  render() {
+    return (
+      <div>
+        {this.props.list.map(item => (
+          <div key={item.id}>{/* Contenido del elemento div */}
+          <p>{item.mensaje}</p>
+          <div>
+            {item.name}
+          </div>
+
+          <img
+          src={item.avatar}
+          alt='Avatar'
+          />
+          
+          </div>
+        ))}
+      </div>
+    );
+  }
+}
+
+
+
+
+
 
 class App extends Component {
   state = {
-    text: 'Hola'
+    list: []
   };
 
-  dispatch = () => {
-    this.setState({
-      text: 'Adios'
+  addMessage = () => {
+    // Crear mensaje falso
+    const message = {
+      id: faker.random.uuid(),
+      name: faker.name.findName(),
+      avatar: faker.image.avatar(),
+      message: faker.hacker.phrase()
+    };
+
+    // Agregar a la lista
+    this.setState(state => ({
+      list: [...state.list, message]
+    }), () => {
+      
     });
   };
 
@@ -15,11 +57,14 @@ class App extends Component {
     return (
       <div>
         <h3>Get SnapShot</h3>
-        <h2>{this.state.text}</h2>
-        <button onClick={this.dispatch}>Cambiar texto</button>
+
+        <Chat
+        list={this.state.list}
+        />
+        <button onClick={this.addMessage}>Mostrar mensaje</button>
       </div>
     );
   }
 }
 
-export default App; // No olvides exportar el componente
+export default App;
