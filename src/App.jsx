@@ -24,8 +24,17 @@ const avatarStyle = {
 class Chat extends Component {
   box = React.createRef();
 
-  componentDidUpdate() {
-    this.box.current.scrollTop = this.box.current.scrollHeight;
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    // Guardamos si el usuario está al final del scroll
+    const isScrolledToBottom = this.box.current.scrollTop + this.box.current.offsetHeight === this.box.current.scrollHeight;
+    return isScrolledToBottom;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // Si el usuario estaba al final del scroll antes de la actualización, lo desplazamos al final de nuevo
+    if (snapshot) {
+      this.box.current.scrollTop = this.box.current.scrollHeight;
+    }
   }
 
   render() {
